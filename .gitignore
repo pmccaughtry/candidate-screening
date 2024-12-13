@@ -3,5 +3,4 @@ addresses.csv
 emails.csv
 names.csv
 *.idea
-**/*/config.js
-
+.env*
