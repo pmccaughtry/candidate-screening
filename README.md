@@ -1,78 +1,58 @@
-# Thank You For Your Interest In CyberFortress
+## Solution
+The solution is a REST API with protected "weather" endpoint.
 
-If you're reading this, our company has definitely piqued your interest. 
-We're glad you have made it this far and we hope to get to know you more!
-Please follow the instructions to submit your application.
+## Under the hood
+The following technologies were used:
 
-As per our [culture](https://www.cyberfortress.com/about/culture/), 
-we base all merit upon what you are capable of and not upon
-any certifications or education. Being counter-culture, consider this your
-resume. Given that, we thought that this would 
-be a creative way to express that and allow you, the applicant, 
-to express yourself. 
+- Node.js, Express.js for server/api
+- Postgresql for database (pg package for queries)
+- bcrypt for password hashing
+- JWT for tokens
+- Jest for testing
+- Docker Compose for container management, application bootstrapping
 
-## Instructions
+## System requirements
 
-Fork this repository and follow the scenario below.
-The user data is located in `dataset.csv`.
-Be sure to meet all the objectives.
-When you are finished, open a PR against this repository and we will review
-it and reach out to you via PR comments.
-Take as long as you need. 
-We prefer quality work even if it takes extra time.
+- Docker
+- Docker Compose
 
-## Scenario
+## Build instructions
+After downloading, run `docker-compose up --build &`
 
-Your mission, should you choose to accept it, is to build an API which, 
-given a user's unique identifier, should tell us whether it is raining
-in the location where the user lives.
+This step will:
 
-Unfortunately addresses are Personally Identifiable Information and
-we don't want to expose that information to anyone. 
+- create the database and tables
+- populate the database with entries from dataset.csv
+- create passwords for the user entries
+- spin up a Node/Express API and connect to Postgresql
 
-This is where your API comes in. We need you to store all of that information
-in a database that *isn't* accessible by anything or anyone other than your 
-service.
+To shutdown gracefully, `docker-compose down`
 
-### Tools
+## API Usage
+The following curl commands will allow you to login and check for rain for any of the users in the dataset.csv file.
+For convenience, all users have been initialized with the password, "password".
 
-You are free to use any language or tools you desire. Just be aware that
-we are a Go, Python, and JavaScript shop currently, but we aren't afraid
-of using different tech given the proper circumstances.
+The following endpoints are available:
 
-Use any weather API of your choosing.
+- login
+- weather
 
-### Objectives
+### Login
+To obtain a token for use in checking for rain, utilize the curl command below for any registered user (any user in dataset.csv).
 
-* Under no circumstances should any of the users information be publicly
-available.
+`curl -i -X POST "localhost:8000/api/v1/login" -d '{"email": "<email address>", "password": "<password>"}'`
 
-* Your project must be tested with at least 80% branch coverage.
+### Determine if there is rain
+Use the token provided in the response json from login to pass as the token in the X-Access-Token header.
 
-* Your storage engine _must_ be a database. Which flavor is up to you.
+`curl -i "localhost:8000/api/v1/weather" -H X-Access-Token:"<token>"`
 
-* We must be able to run the service locally.
+## Learning Points
+Had learning opportunities configuring Docker Compose and running initialization scripts.
 
-## Bonus Points
+## Wish list
+The following items were not implemented:
 
-* Docker
-
-* Kubernetes
-
-* Docker Compose
-
-* Terraform
-
-* Any CI/CD solution
-
-* A web based user interface
-
-* Scrape [randomlists.com](https://www.randomlists.com/random-addresses) to 
-    generate your own user dataset. (Please scrape responsibly. 
-    Don't scrape too much or too often. I've emailed the dev to let me buy
-    him some beers in preparation for this, but he hasn't got back to me yet
-    and I'd like to not spend hundreds of dollars on beers for our friend.)
-
-## Credits
-
-Addresses, names, and emails were generated using [randomlists.com](https://www.randomlists.com/random-addresses)
+- Endpoints to add/remove users
+- Migration scripts for the database
+- User interface to complement the api

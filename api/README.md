@@ -1,5 +1,5 @@
 ## Solution
-The solution is a REST API with protected "weather" endpoint. 
+The solution is a REST API with protected "weather" endpoint.
 
 ## Under the hood
 The following technologies were used:
